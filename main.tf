@@ -10,7 +10,9 @@ terraform {
 }
  
 provider "aws" {
-    profile = "default"
+    #access_key = "${var.access_key}"
+    #secret_key = "${var.secret_key}"
+    profile = "default" # pega os dados default da conta aws na maquina
     region = "us-west-2"
 }
 
@@ -21,4 +23,28 @@ resource "aws_instance" "app_server" {
     tags = {
         Name = var.instance_name
     }
+}
+
+resource "aws_sqs_queue" "sqs_test_queue" {
+    name = var.sqs_name
+}
+
+resource "aws_sqs_queue_policy" "sqs_test_policy" {
+    queue_url = aws_sqs_queue.sqs_test_queue.id
+
+    policy = <<POLICY
+        {
+            "Version": "2012-10-17",
+            "Id": "sqspolicy",
+            "Statement": [
+                {
+                    "Sid": "First",
+                    "Effect": "Allow",
+                    "Principal": "*",
+                    "Action": "sqs:SendMessage",
+                    "Resource": "${aws_sqs_queue.sqs_test_queue.arn}"
+                }
+            ]
+        }
+    POLICY
 }
