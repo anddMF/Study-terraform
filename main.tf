@@ -1,50 +1,45 @@
 terraform {
     required_providers {
         aws = {
-            source = "hashicorp/aws"
-            version = "~> 3.27"
+            source     = "hashicorp/aws"
+            version    = "~> 2.0"
         }
     }
-
-    required_version = ">= 0.14.9"
+    
+  required_version = ">= 0.14.9"
 }
- 
+
+
 provider "aws" {
-    #access_key = "${var.access_key}"
-    #secret_key = "${var.secret_key}"
-    profile = "default" # pega os dados default da conta aws na maquina
-    region = "us-west-2"
+    region  = "us-east-1"
 }
 
-resource "aws_instance" "app_server" {
-    ami = "ami-830c94e3"
+resource "aws_instance" "dev" {
+    count = 3
+    ami = "ami-0e472ba40eb589f49"
     instance_type = "t2.micro"
+    key_name = "ec2-andrew"
+    tags = {
+        Name = "dev${count.index}"
+    }
+
+    vpc_security_group_ids = [aws_security_group.tf-acesso-ssh.id]
+}
+
+resource "aws_security_group" "tf-acesso-ssh" {
+    name = "acesso"
+    description = "acesso"
+
+    ingress {
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        # Please restrict your ingress to only necessary IPs and ports.
+        # Opening to 0.0.0.0/0 can lead to security vulnerabilities
+        cidr_blocks = [var.ip_acesss_ssh]
+    }
 
     tags = {
-        Name = var.instance_name
+        Name = "tf-ssh"
     }
-}
-
-resource "aws_sqs_queue" "sqs_test_queue" {
-    name = var.sqs_name
-}
-
-resource "aws_sqs_queue_policy" "sqs_test_policy" {
-    queue_url = aws_sqs_queue.sqs_test_queue.id
-
-    policy = <<POLICY
-        {
-            "Version": "2012-10-17",
-            "Id": "sqspolicy",
-            "Statement": [
-                {
-                    "Sid": "First",
-                    "Effect": "Allow",
-                    "Principal": "*",
-                    "Action": "sqs:SendMessage",
-                    "Resource": "${aws_sqs_queue.sqs_test_queue.arn}"
-                }
-            ]
-        }
-    POLICY
 }
