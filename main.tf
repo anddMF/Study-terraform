@@ -13,6 +13,11 @@ provider "aws" {
     region  = "us-east-1"
 }
 
+provider "aws" {
+    alias = "east-2"
+    region = "us-east-2"
+}
+
 resource "aws_instance" "dev" {
     count = 2
     ami = "ami-0e472ba40eb589f49"
@@ -42,22 +47,4 @@ resource "aws_s3_bucket" "dev3-bucket" {
   tags = {
     Name = "terraform-dev3"
   }
-}
-
-resource "aws_security_group" "tf-acesso-ssh" {
-    name = "tf-acesso-ssh"
-    description = "tf-acesso-ssh"
-    
-    ingress {
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
-        # Please restrict your ingress to only necessary IPs and ports.
-        # Opening to 0.0.0.0/0 can lead to security vulnerabilities
-        cidr_blocks = ["${var.ip_access_ssh}"]
-    }
-
-    tags = {
-        Name = "tf-ssh"
-    }
 }
