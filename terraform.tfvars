@@ -1,2 +1,3 @@
-access_key = "<your-aws-access-here>"
-secret_key = "<your-aws-secret-here>"
+ip_access_ssh = ""
+access_key = ""
+secret_key = ""

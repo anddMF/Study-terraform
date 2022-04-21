@@ -9,13 +9,12 @@ terraform {
   required_version = ">= 0.14.9"
 }
 
-
 provider "aws" {
     region  = "us-east-1"
 }
 
 resource "aws_instance" "dev" {
-    count = 3
+    count = 2
     ami = "ami-0e472ba40eb589f49"
     instance_type = "t2.micro"
     key_name = "ec2-andrew"
@@ -23,7 +22,7 @@ resource "aws_instance" "dev" {
         Name = "dev${count.index}"
     }
 
-    vpc_security_group_ids = [aws_security_group.tf-acesso-ssh.id]
+    vpc_security_group_ids = [${aws_security_group.tf-acesso-ssh.id}]
 }
 
 resource "aws_security_group" "tf-acesso-ssh" {
@@ -36,7 +35,7 @@ resource "aws_security_group" "tf-acesso-ssh" {
         protocol = "tcp"
         # Please restrict your ingress to only necessary IPs and ports.
         # Opening to 0.0.0.0/0 can lead to security vulnerabilities
-        cidr_blocks = [var.ip_accesss_ssh]
+        cidr_blocks = [var.ip_access_ssh]
     }
 
     tags = {
