@@ -19,7 +19,7 @@ variable "sqs_name" {
     default = "my-first-sqs"
 }
 
-variable "ip_accesss_ssh" {
+variable "ip_access_ssh" {
     description = "IP for the cidr_block in security group"
     type = string
 }
