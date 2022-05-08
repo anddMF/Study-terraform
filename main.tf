@@ -22,7 +22,7 @@ resource "aws_instance" "dev" {
     count = 2
     ami = var.amis["us-east-1"]
     instance_type = "t2.micro"
-    key_name = "ec2-andrew"
+    key_name = var.key_name
     tags = {
         Name = "dev${count.index}"
     }
@@ -34,7 +34,7 @@ resource "aws_instance" "dev4" {
     provider = aws.east-2
     ami = var.amis["us-east-2"]
     instance_type = "t2.micro"
-    key_name = "ec2-andrew" # key pair needs to be in the region of the instance
+    key_name = var.key_name # key pair needs to be in the region of the instance
     tags = {
         Name = "dev4"
     }

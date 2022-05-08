@@ -9,6 +9,11 @@ variable "access_key" {
     type = string
 }
 
+variable "cidr_block_list" {
+    type = list
+    default = ["192...", "192..."]
+}
+
 variable "secret_key" {
     description = "Secret key of AWS IAM user"
     type = string
@@ -31,4 +36,9 @@ variable "amis" {
         "us-east-1" = "ami-0e472ba40eb589f49"
         "us-east-2" = "ami-0ba62214afa52bec7"
     }
+}
+
+variable "key_name" {
+    type = string
+    default = "ec2-andrew"
 }
