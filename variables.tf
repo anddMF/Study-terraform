@@ -23,3 +23,12 @@ variable "ip_access_ssh" {
     description = "IP for the cidr_block in security group"
     type = string
 }
+
+variable "amis" {
+    type = map
+
+    default = {
+        "us-east-1" = "ami-0e472ba40eb589f49"
+        "us-east-2" = "ami-0ba62214afa52bec7"
+    }
+}
